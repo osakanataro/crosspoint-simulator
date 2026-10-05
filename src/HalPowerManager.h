@@ -49,6 +49,8 @@ public:
 
   // Get battery percentage (range 0-100)
   uint16_t getBatteryPercentage() const;
+  // OST firmware: raw cell voltage for the clock screen's battery log.
+  uint16_t getBatteryMillivolts() const;
 
   // RAII helper class to manage power saving locks
   // Usage: create an instance of Lock in a scope to disable power saving, for

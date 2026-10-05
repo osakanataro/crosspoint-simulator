@@ -340,6 +340,19 @@ void HalDisplay::begin() {
                             SDL_WINDOWPOS_UNDEFINED, winW, winH,
                             SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
   sdl_renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+  if (!sdl_renderer) {
+    // No GPU-backed renderer: SDL_VIDEODRIVER=dummy (unattended screenshot
+    // runs) and bare containers land here. The software renderer draws into a
+    // host surface that SDL_RenderReadPixels can still capture.
+    std::cerr << "[SIM] No accelerated renderer (" << SDL_GetError()
+              << "); using the software renderer" << std::endl;
+    sdl_renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
+  }
+  if (!sdl_renderer) {
+    std::cerr << "[SIM] SDL_CreateRenderer failed: " << SDL_GetError()
+              << std::endl;
+    return;
+  }
 
   // Keep all rendering logic in logical (winW×winH) coordinates; SDL maps to
   // drawable pixels.

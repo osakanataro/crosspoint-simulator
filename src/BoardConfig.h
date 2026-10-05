@@ -173,6 +173,11 @@ struct BoardProfile {
   uint16_t displayWidth = 800;
   uint16_t displayHeight = 480;
   TouchConfig touch = {};
+  // SPI card clock as the SDK's SdPins carries it; 0 = driver default. The
+  // OST firmware logs it at boot.
+  struct {
+    uint32_t spiHz = 0;
+  } sd = {};
 };
 
 #if defined(SIMULATOR_DISPLAY_UC8179)
